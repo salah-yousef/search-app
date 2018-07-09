@@ -25,6 +25,7 @@
         function addImage() {
             let htmlContent = document.createElement('div');
             const data = JSON.parse(this.responseText);
+            console.log(this.responseText)
             const firstImage = data.results[0];
 
             if (data && data.results && data.results[0]) {
@@ -40,6 +41,7 @@
 
         function addArticles() {
             let htmlContent = document.createElement('div');
+            console.log(this.responseText)
             const data = JSON.parse(this.responseText);
             if (data.response && data.response.docs && data.response.docs.length > 1) {
                 htmlContent.innerHTML = '<ul>' + data.response.docs.map(article => `<li class="article"> <h2> <a href="${article.web_url}"> ${article.headline.main} </a> </h2>
