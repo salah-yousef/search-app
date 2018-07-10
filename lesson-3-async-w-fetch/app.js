@@ -13,11 +13,16 @@
             headers: {
                 Authorization: 'Client-ID dcfe3a0e0b3631911d31eb1c88ebac9cf292bd1b2e9140bfc46da8bbff997f2a'
             }
-        }).then(response => response.json())
+        })
+            .then(response => response.json())
             .then(addImage)
-            .catch(function (err) {
-                console.log(err);
-            });
+            .catch(err => requestError(err, 'image'));
+
+        fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=742f63e717a9401ebc334310cdf5c37d`, {
+        })
+            .then(response => response.json())
+            .then(addArticles)
+            .catch(err => requestError(err, 'articles'));
 
         function addImage(images) {
             let htmlContent = document.createElement('div');
@@ -34,14 +39,6 @@
             responseContainer.insertAdjacentElement('afterbegin', htmlContent);
         }
 
-
-        fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=742f63e717a9401ebc334310cdf5c37d`, {
-        }).then(response => response.json())
-            .then(addArticles)
-            .catch(function (err) {
-                console.log(err);
-            });
-
         function addArticles(articles) {
             let htmlContent = document.createElement('div');
             if (articles.response && articles.response.docs && articles.response.docs.length > 1) {
@@ -55,5 +52,11 @@
             responseContainer.insertAdjacentElement('beforeend', htmlContent);
 
         }
+
+        function requestError(err, part) {
+            console.log(err);
+            responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning">Oh no! There was an error making a request for the ${part}.</p>`);
+        }
+
     });
 })();
